@@ -14,10 +14,11 @@ $(function($, _, Backbone) {
     initialize: function(opts) {
       var that = this;
       this.opts = opts;
+
+      // remove the widget if clicked outside
       setTimeout(function() { $('body').on('click', that.remove.bind(that)) });
 
-      // create item views
-      // TODO: handle groups
+      // create item/group views, listen for "selected" events
       this.items = _.map(opts.items, function(v) {
         var view;
         if(v.group) view = new ItemGroupView({group: v});
@@ -28,22 +29,28 @@ $(function($, _, Backbone) {
       });
 
     },
+    // deletegate search to children
     _onSearch: function(e) {
       _.each(this.items, function(v) { v.search(e.target.value); });
     },
+    // reset the textbox
     _onClear: function() {
       this.$('.search').val('').change();
       this.$('.search').focus();
     },
+    // emit selection & remove
     _onItemSelection: function(item) {
       this.trigger('selection', item);
       this.remove();
     },
+    // prevent removal from "body" listener
     _onClick: function(e) { e.stopPropagation(); },
+    // remove children & self
     remove: function() {
       _.invokeMap(this.items, 'remove');
       return Backbone.View.prototype.remove.apply(this);
     },
+    // render children & focus on textbox
     render: function() {
       var that = this;
       this.$el.append(this.template({}));
@@ -66,6 +73,7 @@ $(function($, _, Backbone) {
     initialize: function(opts) {
       this.data = opts.item;
     },
+    // render template & show help if present
     render: function() {
       this.$el.append(this.template({data: this.data}));
       if(this.data.help) this.$('.help').show();
@@ -74,10 +82,12 @@ $(function($, _, Backbone) {
     _onClick: function() {
       this.trigger('selected', this.data);
     },
+    // prevent selection on clicking help button
     _onHelp: function(e) {
       e.stopPropagation();
       console.log(this.data.help.value);
     },
+    // Case insensitive. check if value or displayValue match. Show/Hide accordingly
     search: function(query) {
       var match = false;
       query = query.toLowerCase();
@@ -101,6 +111,7 @@ $(function($, _, Backbone) {
       var that = this;
       this.data = opts.group;
 
+      // create child views, listen for "selected" events
       this.items = _.map(this.data.items, function(v) {
         var view;
         if(v.group) view = new ItemGroupView({group: v});
@@ -110,6 +121,7 @@ $(function($, _, Backbone) {
         return view;
       });
     },
+    // check if any children match. If none, hide self
     search: function(query) {
       var match = _.some(_.invokeMap(this.items, 'search', query));
       if(match) this.show();
@@ -119,6 +131,7 @@ $(function($, _, Backbone) {
     hide: function() { this.$el.hide(); },
     show: function() { this.$el.show(); },
     _onItemSelection: function(item) { this.trigger('selected', item); },
+    // render template & children
     render: function() {
       var that = this;
       this.$el.append(this.template({data: this.data}));
@@ -127,6 +140,7 @@ $(function($, _, Backbone) {
       });
       return this;
     },
+    // remove children & self
     remove: function() {
       _.invokeMap(this.items, 'remove');
       return Backbone.View.prototype.remove.apply(this);

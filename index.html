@@ -15,6 +15,8 @@
   </div>
 </body>
 
+
+<!-- Templates -->
 <script type="text/template" id="selector-widget">
   <!-- <div class="selector-widget-container"> -->
     <div class="search-row">
@@ -41,6 +43,7 @@
   <!-- </div> -->
 </script>
 
+<!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
@@ -49,7 +52,9 @@
 
 $(function() {
 
+  // Sample items
   var data = {
+    // grouped example
     expressions: [
       {
         group: 'Bag-Tuple',
@@ -104,6 +109,7 @@ $(function() {
         ]
       }
     ],
+    // flat example
     fields: [
       {value: 'year'},
       {value: 'month', help: {value: 'HELP!'}},
@@ -139,22 +145,30 @@ $(function() {
     ]
   };
 
+  // on selector click, instantiate the widget, render, position & listen for "selection" event
   $('.selector').on('click', function(e) {
     var items;
     var $el = $(e.target);
+    
+    // determine item set
     if($el.hasClass('field')) items = data.fields;
     if($el.hasClass('expression')) items = data.expressions;
 
+    // instantiate widget
     var selector = new SelectorWidget({items: items});
     selector.render();
-    // TODO: relative to $el
     $('body').append(selector.$el);
-
+    
+    // position over $el
     selector.$el.css($el.offset());
+    
+    // on selection replace target contents
     selector.on('selection', function(item) {
       $el.text(item.value);
     });
   });
+  
+  // trigger for faster testing
   var $testEl = $('#tester');
   $testEl.click();
 
