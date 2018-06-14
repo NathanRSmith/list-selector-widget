@@ -1,0 +1,60 @@
+body {
+  position: relative;
+  margin: 0;
+}
+
+#container {
+  border: 1px solid black;
+  display: block;
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: fit-content;
+}
+
+#container .expression-row {
+  margin: 5px
+}
+
+#container .selector {
+  border: 1px dashed blue;
+}
+
+.selector-container {
+  position: relative;
+}
+
+
+
+/* widget */
+.selector-widget-container {
+  position: absolute;
+  width: fit-content;
+  border: 1px solid green;
+  background: white;
+}
+.selector-widget-container .search-row .controls-container {
+  float: right;
+}
+
+
+.selector-widget-container .list-container {
+  height: 120px;
+  overflow-y: scroll;
+  border-top: 1px solid green;
+}
+
+.selector-widget-container .item .help {
+  float: right;
+}
+
+.selector-widget-container .group-container .group-header {
+  font-weight: bold;
+}
+.selector-widget-container .group-container .items-container {
+  padding-left: 10px;
+}

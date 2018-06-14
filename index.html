@@ -1,0 +1,164 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style/style.css">
+</head>
+<body>
+  <div id="container">
+    <div class="expression-row">
+      <span class="selector expression">expression</span> :
+      <span class="selector field">field</span>
+    </div>
+    <div class="expression-row">
+      <span class="selector expression">expression</span> :
+      <span id="tester" class="selector field">field</span>
+    </div>
+  </div>
+</body>
+
+<script type="text/template" id="selector-widget">
+  <!-- <div class="selector-widget-container"> -->
+    <div class="search-row">
+      <span class="controls-container">
+        <button class="clear" type="button">x</button>
+      </span>
+      <span class="search-container">
+        <input class="search" type="text" placeholder="stuff">
+      </span>
+    </div>
+    <div class="list-container"></div>
+  <!-- </div> -->
+</script>
+<script type="text/template" id="selector-widget-group">
+  <!-- <div class="group-container"> -->
+    <div class="group-header"><%= data.group %></div>
+    <div class="items-container"></div>
+  <!-- </div> -->
+</script>
+<script type="text/template" id="selector-widget-item">
+  <!-- <div class="item"> -->
+    <span class="help" style="display: none;"><button type="button">?</button></span>
+    <span class="display"><%= data.displayValue || data.value %></span>
+  <!-- </div> -->
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+<script src="src/list-selector-widget.js"></script>
+<script>
+
+$(function() {
+
+  var data = {
+    expressions: [
+      {
+        group: 'Bag-Tuple',
+        items: [
+          {value: 'Coalesce'},
+        ]
+      },
+      {
+        group: 'Boolean',
+        items: [
+          {value: 'And'},
+          {value: 'Equality'},
+          {value: 'GreaterEqualThan'},
+          {value: 'GreaterThan'},
+          {value: 'In'},
+          {value: 'Inequality'},
+          {value: 'LessEqualThan'},
+          {value: 'LessThan'},
+          {value: 'Matches'},
+          {value: 'Not'},
+          {value: 'Or'},
+        ]
+      },
+      {
+        group: 'Case',
+        items: [
+          {value: 'Bincond'},
+          {value: 'Digitize'},
+        ]
+      },
+      {
+        group: 'DataType',
+        items: [
+          {value: 'Bool'},
+          {value: 'CastToChararray'},
+          {value: 'CastToDouble'},
+          {value: 'CastToFloat'},
+          {value: 'CastToInteger'},
+          {value: 'CastToLong'},
+          {value: 'Chararray'},
+          {value: 'Datetime'},
+          {value: 'Double'},
+          {value: 'Float'},
+          {value: 'Integer'},
+          {value: 'Long'},
+          {value: 'NullBool'},
+          {value: 'NullChararray'},
+          {value: 'NullDatetime'},
+          {value: 'NullFloat'},
+          {value: 'NullInteger'},
+          {value: 'NullLong'},
+        ]
+      }
+    ],
+    fields: [
+      {value: 'year'},
+      {value: 'month', help: {value: 'HELP!'}},
+      {value: 'DayOfMonth'},
+      {value: 'DayOfWeek'},
+      {value: 'DepTime_actual'},
+      {value: 'CRSDepTime'},
+      {value: 'ArrTime_actual'},
+      {value: 'CRSArrTime'},
+      {value: 'UniqueCarrier'},
+      {value: 'FlightNum'},
+      {value: 'TailNum'},
+      {value: 'ActualElapsedTime'},
+      {value: 'CRSElapsedTime'},
+      {value: 'AirTime'},
+      {value: 'ArrDelay'},
+      {value: 'DepDelay'},
+      {value: 'Origin'},
+      {value: 'Dest'},
+      {value: 'Distance'},
+      {value: 'TaxiIn'},
+      {value: 'TaxiOut'},
+      {value: 'Cancelled'},
+      {value: 'CancellationCode'},
+      {value: 'Diverted'},
+      {value: 'CarrierDelay'},
+      {value: 'WeatherDelay'},
+      {value: 'NASDelay'},
+      {value: 'SecurityDelay'},
+      {value: 'LateAircraftDelay'},
+      {value: 'mybag.field1'},
+      {value: 'mybag.otherfield'}
+    ]
+  }
+
+  $('.selector').on('click', function(e) {
+    var items;
+    var $el = $(e.target);
+    if($el.hasClass('field')) items = data.fields;
+    if($el.hasClass('expression')) items = data.expressions;
+
+    var selector = new SelectorWidget({items: items});
+    selector.render();
+    // TODO: relative to $el
+    $('body').append(selector.$el);
+
+    selector.$el.css($el.offset());
+    selector.on('selection', function(item) {
+      $el.text(item.value);
+    })
+  });
+  var $testEl = $('#tester');
+  $testEl.click();
+
+});
+
+</script>
+</html>
