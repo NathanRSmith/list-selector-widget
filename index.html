@@ -137,7 +137,7 @@ $(function() {
       {value: 'mybag.field1'},
       {value: 'mybag.otherfield'}
     ]
-  }
+  };
 
   $('.selector').on('click', function(e) {
     var items;
@@ -153,7 +153,7 @@ $(function() {
     selector.$el.css($el.offset());
     selector.on('selection', function(item) {
       $el.text(item.value);
-    })
+    });
   });
   var $testEl = $('#tester');
   $testEl.click();

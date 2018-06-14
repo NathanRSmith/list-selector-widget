@@ -1,4 +1,6 @@
 $(function($, _, Backbone) {
+  'use strict';
+
   var SelectorWidget = window.SelectorWidget = Backbone.View.extend({
     tagName: 'div',
     className: 'selector-widget-container',
